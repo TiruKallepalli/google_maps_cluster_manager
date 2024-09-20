@@ -29,7 +29,7 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  late ClusterManager _manager;
+  late CustomClusterManager _manager;
 
   Completer<GoogleMapController> _controller = Completer();
 
@@ -68,12 +68,12 @@ class MapSampleState extends State<MapSample> {
 
   @override
   void initState() {
-    _manager = _initClusterManager();
+    _manager = _initCustomClusterManager();
     super.initState();
   }
 
-  ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(items, _updateMarkers,
+  CustomClusterManager<Place> _initCustomClusterManager() {
+    return CustomClusterManager<Place>(items, _updateMarkers,
         markerBuilder: _markerBuilder);
   }
 
@@ -111,7 +111,7 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
-  Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
+  Future<Marker> Function(CustomCluster<Place>) get _markerBuilder =>
       (cluster) async {
         return Marker(
           markerId: MarkerId(cluster.getId()),
@@ -156,6 +156,6 @@ class MapSampleState extends State<MapSample> {
     final img = await pictureRecorder.endRecording().toImage(size, size);
     final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
 
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+    return BitmapDescriptor.bytes(data.buffer.asUint8List());
   }
 }
